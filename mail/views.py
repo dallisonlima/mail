@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Email
 
-
+@require_http_methods(["GET", "POST"])
 def index(request):
 
     # Authenticated users view their inbox
@@ -23,6 +23,7 @@ def index(request):
 
 @csrf_exempt
 @login_required
+@require_http_methods(["GET", "POST"])
 def compose(request):
 
     # Composing a new email must be via POST
@@ -73,6 +74,7 @@ def compose(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
 def mailbox(request, mailbox):
 
     # Filter emails returned based on mailbox
@@ -98,6 +100,7 @@ def mailbox(request, mailbox):
 
 @csrf_exempt
 @login_required
+@require_http_methods(["GET", "POST"])
 def email(request, email_id):
 
     # Query for requested email
@@ -126,7 +129,7 @@ def email(request, email_id):
             "error": "GET or PUT request required."
         }, status=400)
 
-
+@require_http_methods(["GET", "POST"])
 def login_view(request):
     if request.method == "POST":
 
@@ -146,14 +149,14 @@ def login_view(request):
     else:
         return render(request, "mail/login.html")
 
-
+@require_http_methods(["GET", "POST"])
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 MAILREGISTER = "mail/register.html"
 
-
+@require_http_methods(["GET", "POST"])
 def register(request):
     if request.method == "POST":
         email = request.POST["email"]
